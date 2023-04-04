@@ -14,25 +14,25 @@ public class Conexao extends Thread {
 	private InputStreamReader inputStreamReader;
 	private BufferedReader bufferedReader;
 	private JTextArea tela;
-	
+
 	public Conexao(Socket cliente, JTextArea texto) {
 		this.tela = texto;
 		try {
-			
-            entrada = cliente.getInputStream();
-            inputStreamReader = new InputStreamReader(entrada);
-            bufferedReader = new BufferedReader(inputStreamReader);
-            
+
+			entrada = cliente.getInputStream();
+			inputStreamReader = new InputStreamReader(entrada);
+			bufferedReader = new BufferedReader(inputStreamReader);
+
 		} catch (IOException e) {
 			System.out.println("Erro IO Conexao: " + e.getMessage());
 		}
 	}
-	
+
 	public void run() {
 		try {
 			while (true) {
 				String recebido = bufferedReader.readLine();
-				
+
 				if (recebido != null) {
 					tela.append(recebido + "\n");
 				}

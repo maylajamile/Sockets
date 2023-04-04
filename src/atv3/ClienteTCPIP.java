@@ -40,39 +40,39 @@ public class ClienteTCPIP extends JFrame {
 		lblCliente = new JLabel("Histórico");
 		JScrollPane scroll = new JScrollPane(texto);
 		texto.setLineWrap(true);
-		
+
 		txtMsg = new JTextField(22);
 		lblMsg = new JLabel("Mensagem:");
 		txtNome = new JTextField(24);
 		lblNome = new JLabel("Usuário:");
-		
+
 		btnEnviar = new JButton("Enviar");
-		
+
 		btnEnviar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
+
 					String recebido = txtMsg.getText();
-					
+
 					if (recebido.equals("#QUIT")) {
 						socket.close();
 						dispose();
 					} else if (recebido.equals("#USERS")) {
-						//TODO - implementar lista de usuarios
+						// TODO - implementar lista de usuarios
 					} else {
 						bufferedWriter.write(txtNome.getText() + " > " + recebido + "\n");
 						texto.append(txtNome.getText() + " > " + recebido + "\n");
 						txtMsg.setText("");
 						bufferedWriter.flush();
 					}
-					
+
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
 			}
 		});
-		
+
 		pnlContent.add(lblCliente);
 		pnlContent.add(scroll);
 		pnlContent.add(lblNome);
@@ -91,10 +91,10 @@ public class ClienteTCPIP extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
-		ClienteTCPIP clienteTCPIP = new  ClienteTCPIP();
+
+		ClienteTCPIP clienteTCPIP = new ClienteTCPIP();
 		clienteTCPIP.conectar();
-		
+
 	}
 
 	private void conectar() {
@@ -108,6 +108,6 @@ public class ClienteTCPIP extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 }

@@ -33,7 +33,7 @@ public class ClienteUDP extends JFrame {
 		txtOperacao = new JTextField(20);
 		txtResultado = new JTextField(30);
 		txtResultado.setEnabled(false);
-		
+
 		btnCalcular = new JButton("Calcular");
 		btnCalcular.addActionListener(new ActionListener() {
 			@Override
@@ -76,7 +76,7 @@ public class ClienteUDP extends JFrame {
 				String resultado = new String(buffer, 0, receive.getLength()).trim();
 				txtResultado.setDisabledTextColor(Color.GREEN);
 				txtResultado.setText(resultado);
-				
+
 			}
 		});
 

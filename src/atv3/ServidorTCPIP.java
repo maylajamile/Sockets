@@ -1,4 +1,5 @@
 package atv3;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -9,12 +10,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class ServidorTCPIP extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
 	private JTextArea texto;
 	private JLabel lblServidor;
 	private JPanel pnlContent;
-	
+
 	public ServidorTCPIP() {
 		pnlContent = new JPanel();
 		texto = new JTextArea(27, 30);
@@ -35,20 +36,20 @@ public class ServidorTCPIP extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
+
 		ServidorTCPIP tela = new ServidorTCPIP();
-		
-        try{
-        	int porta = 12345;
-            ServerSocket servidor = new ServerSocket(12345);
-            System.out.println("Servidor ativo na porta: " + porta);
-			
-            while (true) {
+
+		try {
+			int porta = 12345;
+			ServerSocket servidor = new ServerSocket(12345);
+			System.out.println("Servidor ativo na porta: " + porta);
+
+			while (true) {
 				Socket cliente = servidor.accept();
 				new Conexao(cliente, tela.texto).start();
 			}
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
