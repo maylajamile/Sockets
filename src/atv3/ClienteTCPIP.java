@@ -84,7 +84,7 @@ public class ClienteTCPIP extends JFrame {
 		setTitle("Chat");
 		setContentPane(pnlContent);
 		setLocationRelativeTo(null);
-		setResizable(false);
+		setResizable(true);
 		setSize(400, 500);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

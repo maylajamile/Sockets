@@ -90,10 +90,9 @@ public class ClienteUDP extends JFrame {
 		setTitle("Calculadora");
 		setSize(390, 200);
 		setLocationRelativeTo(null);
-		setResizable(false);
+		setResizable(true);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 	}
 
 	public static void main(String[] args) {
