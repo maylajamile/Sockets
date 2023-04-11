@@ -20,6 +20,10 @@ TCP/IP e servidores RMI.
  - Clicar no botão calcular para receber a resposta.
  
 <strong>Atividade 2: Se trata de um classificados de veículos usando um servidor RMI.</strong>
+ - Executar a classe Servidor para iniciar o servidor RMI.
+ - Executar a classe Cliente para se comunicar com o servidor.
+ - Utilizar o método adicionarVeiculo() para adiciona-lo na lista de classificados.
+ - Utilizar o método pesquisar() para buscar os carros listados a partir da marca do carro.
 
 <strong>Atividade 3: Se trata de um chat usando protocolo TCP/IP.</strong>
  - Executar a classe ServidorTCPIP responsavél por criar o socket de conexão.
