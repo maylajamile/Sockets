@@ -1,13 +1,15 @@
 package atv3;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,10 +34,12 @@ public class ClienteTCPIP extends JFrame {
 	private Writer writer;
 	private BufferedWriter bufferedWriter;
 	private Socket socket;
+	private String mensagem = null;
 
 	public ClienteTCPIP() {
 		pnlContent = new JPanel();
-		texto = new JTextArea(22, 30);
+		texto = new JTextArea(19, 25);
+		texto.setFont(new Font("Arial", Font.PLAIN, 16));
 		texto.setEditable(false);
 		lblCliente = new JLabel("Histórico");
 		JScrollPane scroll = new JScrollPane(texto);
@@ -47,28 +51,36 @@ public class ClienteTCPIP extends JFrame {
 		lblNome = new JLabel("Usuário:");
 
 		btnEnviar = new JButton("Enviar");
-
 		btnEnviar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 
-					String recebido = txtMsg.getText();
+					Usuario usuario = new Usuario(txtNome.getText());
+					String mensagem = txtMsg.getText();
+					String nome = txtNome.getText();
 
-					if (recebido.equals("#QUIT")) {
+					if (mensagem.equalsIgnoreCase("#QUIT")) {
+						bufferedWriter.write("[Cliente] - Usuário " + txtNome.getText() + " se desconectou do chat.");
+						usuario.removerUsuario(txtNome.getText());
+						bufferedWriter.close();
+						writer.close();
+						outputStream.close();
 						socket.close();
-						dispose();
-					} else if (recebido.equals("#USERS")) {
-						// TODO - implementar lista de usuarios
+						System.exit(0);
+					} else if (mensagem.equalsIgnoreCase("#USERS")) {
+						texto.append("[Cliente] - Os usuários conectados neste chat são: \n" + usuario.listarUsuarios()
+								+ "\n");
 					} else {
-						bufferedWriter.write(txtNome.getText() + " > " + recebido + "\n");
-						texto.append(txtNome.getText() + " > " + recebido + "\n");
-						txtMsg.setText("");
-						bufferedWriter.flush();
+						bufferedWriter.write(nome + " > " + mensagem + "\n");
+						texto.append(nome + " > " + mensagem + "\n");
 					}
 
-				} catch (IOException ex) {
-					ex.printStackTrace();
+					bufferedWriter.flush();
+					txtMsg.setText("");
+
+				} catch (Exception ex) {
+					System.out.println("[Cliente] - Erro ao enviar mensagem. " + ex.getMessage());
 				}
 			}
 		});
@@ -84,17 +96,18 @@ public class ClienteTCPIP extends JFrame {
 		setTitle("Chat");
 		setContentPane(pnlContent);
 		setLocationRelativeTo(null);
-		setResizable(true);
-		setSize(400, 500);
+		setResizable(false);
+		setPreferredSize(new Dimension(400, 490));
+		pack();
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	public static void main(String[] args) {
 
-		ClienteTCPIP clienteTCPIP = new ClienteTCPIP();
-		clienteTCPIP.conectar();
-
+		ClienteTCPIP cliente = new ClienteTCPIP();
+		cliente.conectar();
+		cliente.receberMensagens();
 	}
 
 	private void conectar() {
@@ -103,11 +116,29 @@ public class ClienteTCPIP extends JFrame {
 			outputStream = socket.getOutputStream();
 			writer = new OutputStreamWriter(outputStream);
 			bufferedWriter = new BufferedWriter(writer);
-			bufferedWriter.write(txtMsg.getText());
+			bufferedWriter.write(mensagem + "\n");
 			bufferedWriter.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		} catch (Exception e) {
+			texto.append("[Cliente] - Não foi possível fazer conexão com o servidor. \n");
 		}
 
+	}
+
+	private void receberMensagens() {
+		try {
+			Scanner scanner = new Scanner(socket.getInputStream());
+
+			while (!"#QUIT".equalsIgnoreCase(mensagem)) {
+				if (scanner.hasNextLine()) {
+					mensagem = scanner.nextLine();
+					if (mensagem != null) {
+						texto.append(mensagem + "\n");
+					}
+				}
+			}
+		} catch (Exception e) {
+			texto.append("[Cliente] - Não foi possível receber as mensagens do chat. \n");
+		}
 	}
 }

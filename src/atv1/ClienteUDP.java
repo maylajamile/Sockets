@@ -1,6 +1,8 @@
 package atv1;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -31,7 +33,9 @@ public class ClienteUDP extends JFrame {
 		lblOperacao = new JLabel("Digite a operação no formato [num1 sinal num2]:");
 		lblResultado = new JLabel("Resultado da operação:");
 		txtOperacao = new JTextField(20);
-		txtResultado = new JTextField(30);
+		txtResultado = new JTextField(25);
+		txtOperacao.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		txtResultado.setFont(new Font("SansSerif", Font.BOLD, 14));
 		txtResultado.setEnabled(false);
 
 		btnCalcular = new JButton("Calcular");
@@ -74,7 +78,7 @@ public class ClienteUDP extends JFrame {
 				}
 
 				String resultado = new String(buffer, 0, receive.getLength()).trim();
-				txtResultado.setDisabledTextColor(Color.GREEN);
+				txtResultado.setDisabledTextColor(Color.BLUE);
 				txtResultado.setText(resultado);
 
 			}
@@ -88,9 +92,10 @@ public class ClienteUDP extends JFrame {
 
 		setContentPane(pnlContent);
 		setTitle("Calculadora");
-		setSize(390, 200);
 		setLocationRelativeTo(null);
-		setResizable(true);
+		setResizable(false);
+		setPreferredSize(new Dimension(390, 150));
+		pack();
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
